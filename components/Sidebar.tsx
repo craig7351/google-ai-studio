@@ -1,14 +1,14 @@
 import React from 'react';
-import { 
-  LayoutGrid, 
-  Gamepad2, 
-  GraduationCap, 
-  CheckSquare, 
-  Users, 
-  Wrench, 
-  Film, 
-  Camera, 
-  HeartPulse, 
+import {
+  LayoutGrid,
+  Gamepad2,
+  GraduationCap,
+  CheckSquare,
+  Users,
+  Wrench,
+  Film,
+  Camera,
+  HeartPulse,
   DollarSign,
   Plus,
   Box
@@ -38,7 +38,7 @@ const IconMap: Record<string, React.ElementType> = {
 
 export const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onSelectCategory, onOpenSubmit, isOpen }) => {
   return (
-    <aside 
+    <aside
       className={`
         fixed inset-y-0 left-0 z-30 w-64 transform bg-studio-sidebar border-r border-studio-border transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -52,19 +52,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onSelectCate
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <Box className="w-5 h-5 text-white" />
             </div>
-            <span>AppShowcase</span>
+            <span>One-liner APP</span>
           </div>
-        </div>
-
-        {/* New Button */}
-        <div className="p-4">
-          <button
-            onClick={onOpenSubmit}
-            className="w-full flex items-center justify-center gap-2 bg-studio-surface hover:bg-[#3C3D40] text-blue-300 hover:text-blue-200 py-3 px-4 rounded-full transition-colors border border-transparent hover:border-studio-border font-medium"
-          >
-            <Plus className="w-5 h-5" />
-            <span>Submit App</span>
-          </button>
         </div>
 
         {/* Categories */}
@@ -76,15 +65,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onSelectCate
             {CATEGORIES.map((cat) => {
               const Icon = IconMap[cat.icon] || LayoutGrid;
               const isSelected = selectedCategory === cat.id;
-              
+
               return (
                 <button
                   key={cat.id}
                   onClick={() => onSelectCategory(cat.id)}
                   className={`
                     w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-medium transition-colors
-                    ${isSelected 
-                      ? 'bg-[#004A77] text-blue-200' 
+                    ${isSelected
+                      ? 'bg-[#004A77] text-blue-200'
                       : 'text-studio-subtext hover:bg-studio-surface hover:text-studio-text'
                     }
                   `}
@@ -95,6 +84,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onSelectCate
               );
             })}
           </nav>
+        </div>
+
+        {/* Contact Info Footer */}
+        <div className="p-4 border-t border-studio-border text-xs text-studio-subtext">
+          <div className="mb-2">
+            Author: Craig Huang
+          </div>
+          <div className="mb-1">
+            <a href="mailto:craig7351@gmail.com" className="hover:text-blue-300 transition-colors">
+              craig7351@gmail.com
+            </a>
+          </div>
+          <div>
+            <a
+              href="https://www.facebook.com/craig.huang.334/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-300 transition-colors"
+            >
+              Facebook
+            </a>
+          </div>
         </div>
       </div>
     </aside>

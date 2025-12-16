@@ -1,7 +1,6 @@
 export interface AppEntry {
   id: string;
   name: string;
-  description: string;
   category: string;
   link: string;
   images: string[];

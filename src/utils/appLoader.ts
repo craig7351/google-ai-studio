@@ -4,7 +4,6 @@ import { AppEntry } from '../../types';
 // createdAt content can be optional in JSON, derived if missing
 interface AppData {
     name: string;
-    description: string;
     category: string;
     link: string;
     images: string[];
@@ -49,7 +48,6 @@ export function loadApps(): AppEntry[] {
         return {
             id,
             name: data.name,
-            description: data.description,
             category: data.category,
             link: data.link,
             images: processedImages,

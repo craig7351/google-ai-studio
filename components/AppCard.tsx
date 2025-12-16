@@ -32,9 +32,6 @@ export const AppCard: React.FC<AppCardProps> = ({ app }) => {
         </div>
 
         <h3 className="text-2xl font-bold text-studio-text mb-2">{app.name}</h3>
-        <p className="text-studio-subtext text-sm mb-6 line-clamp-3 flex-1 leading-relaxed">
-          {app.description}
-        </p>
 
         {app.prompt && (
           <div className="mb-4 p-3 bg-studio-surface border border-studio-border rounded-lg">

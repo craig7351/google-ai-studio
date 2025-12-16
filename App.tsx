@@ -2,29 +2,18 @@ import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { AppCard } from './components/AppCard';
-import { SubmitModal } from './components/SubmitModal';
 import { loadApps } from '@/src/utils/appLoader';
 import { AppCategory, AppEntry } from './types';
 
 const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(AppCategory.ALL);
   const [apps, setApps] = useState<AppEntry[]>(() => loadApps());
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Filter apps based on selection
   const filteredApps = selectedCategory === AppCategory.ALL
     ? apps
     : apps.filter(app => app.category === selectedCategory);
-
-  const handleAddApp = (newApp: Omit<AppEntry, 'id' | 'createdAt'>) => {
-    const entry: AppEntry = {
-      ...newApp,
-      id: Date.now().toString(),
-      createdAt: Date.now()
-    };
-    setApps(prev => [entry, ...prev]);
-  };
 
   return (
     <div className="flex h-screen bg-studio-bg overflow-hidden text-studio-text font-sans">
@@ -37,6 +26,7 @@ const App: React.FC = () => {
         />
       )}
 
+
       {/* Sidebar */}
       <Sidebar
         selectedCategory={selectedCategory}
@@ -44,7 +34,8 @@ const App: React.FC = () => {
           setSelectedCategory(cat);
           setIsSidebarOpen(false); // Close on mobile select
         }}
-        onOpenSubmit={() => setIsModalOpen(true)}
+        // onOpenSubmit removed
+        onOpenSubmit={() => { }}
         isOpen={isSidebarOpen}
       />
 
@@ -92,14 +83,8 @@ const App: React.FC = () => {
                 </div>
                 <h3 className="text-lg font-medium text-studio-text mb-2">No apps found</h3>
                 <p className="text-studio-subtext max-w-sm">
-                  There are no apps in the {selectedCategory} category yet. Be the first to submit one!
+                  There are no apps in the {selectedCategory} category yet.
                 </p>
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="mt-6 px-6 py-2 rounded-full bg-blue-600/20 text-blue-300 hover:bg-blue-600/30 transition-colors"
-                >
-                  Submit App
-                </button>
               </div>
             )}
 
@@ -108,12 +93,6 @@ const App: React.FC = () => {
           </div>
         </div>
       </main>
-
-      <SubmitModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddApp}
-      />
     </div>
   );
 };

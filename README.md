@@ -42,7 +42,6 @@ We welcome community contributions! To add your app:
     ```json
     {
       "name": "My Cool App",
-      "description": "Short description properly capitalized.",
       "category": "Productivity",
       "link": "https://link-to-your-app.com",
       "images": [
@@ -105,7 +104,6 @@ When defining the `"category"` field, please use one of the following values (Ca
     ```json
     {
       "name": "我的 App",
-      "description": "簡短的描述。",
       "category": "Productivity",
       "link": "https://link-to-your-app.com",
       "images": [
