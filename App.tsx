@@ -4,6 +4,7 @@ import { Sidebar } from './components/Sidebar';
 import { AppCard } from './components/AppCard';
 import { loadApps } from '@/src/utils/appLoader';
 import { AppCategory, AppEntry } from './types';
+import { VisitorCounter } from './components/VisitorCounter';
 
 const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(AppCategory.ALL);
@@ -59,6 +60,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <VisitorCounter />
             {/* Profile or other top right actions could go here */}
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
               U
