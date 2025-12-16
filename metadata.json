@@ -1,0 +1,5 @@
+{
+  "name": "AppShowcase",
+  "description": "A platform for developers to showcase their apps with descriptions, screenshots, and download links, featuring a category-based browsing experience inspired by Google AI Studio.",
+  "requestFramePermissions": []
+}
