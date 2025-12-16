@@ -3,12 +3,12 @@ import { Menu } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { AppCard } from './components/AppCard';
 import { SubmitModal } from './components/SubmitModal';
+import { loadApps } from '@/src/utils/appLoader';
 import { AppCategory, AppEntry } from './types';
-import { MOCK_APPS } from './constants';
 
 const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(AppCategory.ALL);
-  const [apps, setApps] = useState<AppEntry[]>(MOCK_APPS);
+  const [apps, setApps] = useState<AppEntry[]>(() => loadApps());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -28,18 +28,18 @@ const App: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-studio-bg overflow-hidden text-studio-text font-sans">
-      
+
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-20 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <Sidebar 
-        selectedCategory={selectedCategory} 
+      <Sidebar
+        selectedCategory={selectedCategory}
         onSelectCategory={(cat) => {
           setSelectedCategory(cat);
           setIsSidebarOpen(false); // Close on mobile select
@@ -53,7 +53,7 @@ const App: React.FC = () => {
         {/* Top Bar */}
         <header className="h-16 flex items-center justify-between px-6 border-b border-studio-border bg-studio-bg sticky top-0 z-10">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="md:hidden p-2 -ml-2 text-studio-subtext hover:text-white"
             >
@@ -66,12 +66,12 @@ const App: React.FC = () => {
               {filteredApps.length} apps
             </span>
           </div>
-          
+
           <div className="flex items-center gap-4">
-             {/* Profile or other top right actions could go here */}
-             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-               U
-             </div>
+            {/* Profile or other top right actions could go here */}
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
+              U
+            </div>
           </div>
         </header>
 
@@ -94,7 +94,7 @@ const App: React.FC = () => {
                 <p className="text-studio-subtext max-w-sm">
                   There are no apps in the {selectedCategory} category yet. Be the first to submit one!
                 </p>
-                <button 
+                <button
                   onClick={() => setIsModalOpen(true)}
                   className="mt-6 px-6 py-2 rounded-full bg-blue-600/20 text-blue-300 hover:bg-blue-600/30 transition-colors"
                 >
@@ -102,16 +102,16 @@ const App: React.FC = () => {
                 </button>
               </div>
             )}
-            
+
             {/* Bottom spacer */}
             <div className="h-12" />
           </div>
         </div>
       </main>
 
-      <SubmitModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <SubmitModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddApp}
       />
     </div>

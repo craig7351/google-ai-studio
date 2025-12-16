@@ -12,9 +12,9 @@ export const AppCard: React.FC<AppCardProps> = ({ app }) => {
       {/* Large Single Image */}
       <div className="w-full h-64 bg-black/20 relative overflow-hidden">
         {app.images.length > 0 ? (
-          <img 
-            src={app.images[0]} 
-            alt={`${app.name} screenshot`} 
+          <img
+            src={app.images[0]}
+            alt={`${app.name} screenshot`}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
@@ -30,15 +30,24 @@ export const AppCard: React.FC<AppCardProps> = ({ app }) => {
             {app.category}
           </div>
         </div>
-        
+
         <h3 className="text-2xl font-bold text-studio-text mb-2">{app.name}</h3>
         <p className="text-studio-subtext text-sm mb-6 line-clamp-3 flex-1 leading-relaxed">
           {app.description}
         </p>
-        
-        <a 
-          href={app.link} 
-          target="_blank" 
+
+        {app.prompt && (
+          <div className="mb-4 p-3 bg-studio-surface border border-studio-border rounded-lg">
+            <h4 className="text-xs uppercase tracking-wider text-studio-subtext mb-1 font-semibold">Prompt</h4>
+            <code className="text-xs text-studio-text block font-mono whitespace-pre-wrap line-clamp-4">
+              {app.prompt}
+            </code>
+          </div>
+        )}
+
+        <a
+          href={app.link}
+          target="_blank"
           rel="noopener noreferrer"
           className="mt-auto flex items-center justify-center gap-2 w-full py-3 bg-[#0B57D0] hover:bg-[#0842A0] text-white rounded-full text-sm font-medium transition-colors"
         >

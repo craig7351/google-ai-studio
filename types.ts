@@ -5,6 +5,7 @@ export interface AppEntry {
   category: string;
   link: string;
   images: string[];
+  prompt?: string;
   createdAt: number;
 }
 
