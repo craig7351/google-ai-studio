@@ -1,0 +1,10 @@
+{
+    "name": "元素週期表",
+    "description": "幫小孩學習元素週期表",
+    "category": "Education",
+    "link": "https://link-to-your-app.com",
+    "images": [
+        "/apps/periodic-table/periodic-table.png"
+    ],
+    "prompt": "幫我做一個元素週期表教學網站"
+}
