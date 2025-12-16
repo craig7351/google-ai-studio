@@ -2,6 +2,7 @@
   "name": "appshowcase",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://craig7351.github.io/google-ai-studio/",
   "type": "module",
   "scripts": {
     "dev": "vite",
