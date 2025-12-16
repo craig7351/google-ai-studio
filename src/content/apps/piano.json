@@ -1,0 +1,11 @@
+{
+    "id": "gemini-virtuoso",
+    "name": "線上鋼琴網",
+    "category": "Education",
+    "link": "https://ai.studio/apps/drive/11OMK3m9imVddg-k80HCjFKEWN6RCo6WA",
+    "images": [
+        "/apps/piano/piano.png"
+    ],
+    "prompt": "做一個可以線上彈鋼琴的網站",
+    "createdAt": 1734400000000
+}
