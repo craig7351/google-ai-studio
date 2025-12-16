@@ -16,6 +16,11 @@
 
 **Prerequisites:**  Node.js
 
+**Method 1: One-Click Scripts (Windows)**
+- Double-click `start.bat` to install dependencies and run the app.
+- Double-click `stop.bat` to close the server.
+
+**Method 2: Command Line**
 1. Install dependencies:
    `npm install`
 2. Run the app:
