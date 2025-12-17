@@ -1,5 +1,5 @@
-import React from 'react';
-import { ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AppEntry } from '../types';
 
 interface AppCardProps {
@@ -7,16 +7,77 @@ interface AppCardProps {
 }
 
 export const AppCard: React.FC<AppCardProps> = ({ app }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const hasMultipleImages = app.images.length > 1;
+
+  const goToPrevious = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? app.images.length - 1 : prev - 1
+    );
+  };
+
+  const goToNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) =>
+      prev === app.images.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const goToIndex = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex(index);
+  };
+
   return (
     <div className="bg-studio-surface rounded-2xl overflow-hidden border border-studio-border hover:border-gray-500 transition-all duration-200 flex flex-col h-full group shadow-lg">
-      {/* Large Single Image */}
+      {/* Image Carousel */}
       <div className="w-full h-64 bg-black/20 relative overflow-hidden">
         {app.images.length > 0 ? (
-          <img
-            src={app.images[0]}
-            alt={`${app.name} screenshot`}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+          <>
+            <img
+              src={app.images[currentImageIndex]}
+              alt={`${app.name} screenshot ${currentImageIndex + 1}`}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+
+            {/* Navigation Arrows - only show on hover when multiple images */}
+            {hasMultipleImages && (
+              <>
+                <button
+                  onClick={goToPrevious}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={goToNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </>
+            )}
+
+            {/* Dot Indicators */}
+            {hasMultipleImages && (
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {app.images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={(e) => goToIndex(index, e)}
+                    className={`w-2 h-2 rounded-full transition-all duration-200 ${index === currentImageIndex
+                        ? 'bg-white scale-110'
+                        : 'bg-white/50 hover:bg-white/75'
+                      }`}
+                    aria-label={`Go to image ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-studio-bg text-studio-subtext">
             No screenshot

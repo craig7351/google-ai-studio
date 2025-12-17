@@ -1,5 +1,18 @@
 # Release Notes
 
+## 2024-12-17 - 卡片圖片輪播功能
+
+### 新功能
+AppCard 元件現在支援多張圖片輪播：
+- **左右箭頭按鈕**：hover 卡片時顯示，可切換到上/下一張圖片
+- **底部圓點指示器**：顯示目前是第幾張圖片，可點擊直接跳轉
+- 只有多張圖片的卡片才會顯示這些控制項
+
+### 變更檔案
+- `components/AppCard.tsx` - 加入 useState、ChevronLeft/ChevronRight icons、輪播邏輯
+
+---
+
 ## 2024-12-17 - GitHub Pages 部署修復
 
 ### 問題
