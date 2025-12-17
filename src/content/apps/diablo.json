@@ -1,0 +1,10 @@
+{
+    "name": "暗黑破壞神",
+    "category": "Game",
+    "link": "https://ai.studio/apps/drive/1HRf_A5X-QYrXLeYxXzJzM_sGsaqYxUOG",
+    "images": [
+        "/apps/diablo/diablo1.png",
+        "/apps/diablo/diablo2.png"
+    ],
+    "prompt": "幫我參考附件圖片, 幫我做這種風格的遊戲"
+}
