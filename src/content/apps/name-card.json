@@ -1,0 +1,11 @@
+{
+    "name": "名片掃描王",
+    "category": "Productivity",
+    "link": "https://ai.studio/apps/drive/1_QXAR06XjwHHxaUoqQBX8fHMsP7a4HUU",
+    "images": [
+        "/apps/name-card1.png",
+        "/apps/name-card2.png",
+        "/apps/name-card3.png"
+    ],
+    "prompt": "做一個名片掃描app"
+}

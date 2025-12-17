@@ -1,0 +1,9 @@
+{
+    "name": "線上圖片編輯器",
+    "category": "Productivity",
+    "link": "https://ai.studio/apps/drive/1vHsaF6lAi6kJRP11CIHIYZvffc-2YTUS",
+    "images": [
+        "/apps/image-edit.png"
+    ],
+    "prompt": "做一個線上編輯圖片的網站 1.支援上傳圖片 2.支援在圖片上加入文字 (多種可愛風格選擇) 3.支援在圖片上加入可愛SVG(多種可愛風格選擇)"
+}
