@@ -1,0 +1,10 @@
+{
+    "name": "線上聊天室",
+    "category": "Social Networking",
+    "link": "https://ai.studio/apps/drive/1dH4KBKEvRSvH5RyYxIsPkrsE-tCD7J8X",
+    "images": [
+        "/apps/chatroom1.png",
+        "/apps/chatroom2.png"
+    ],
+    "prompt": "做一個駭客任務風格聊天室, 可建立房間, 另一個人用房號加入"
+}

@@ -1,0 +1,11 @@
+{
+    "name": "微積分小學生app",
+    "category": "Education",
+    "link": "https://ai.studio/apps/drive/1GhnSjwHldwXCOdMOVyJYnp-0W3o0tOwJ",
+    "images": [
+        "/apps/Calculus1.png",
+        "/apps/Calculus2.png",
+        "/apps/Calculus3.png"
+    ],
+    "prompt": "做一個中文介紹微積分給小學生聽的app, 最好有圖片或動畫幫助教學"
+}
