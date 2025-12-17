@@ -1,0 +1,10 @@
+{
+    "name": "線上鋼琴音樂遊戲",
+    "category": "Games",
+    "link": "https://ai.studio/apps/drive/1FMORrP-YGYfhft_OWzQfivYTmeWzWeGW",
+    "images": [
+        "/apps/piano1.png",
+        "/apps/piano2.png"
+    ],
+    "prompt": "做一個鋼琴類的音樂遊戲, 要跟著螢幕指示按, 會得分"
+}

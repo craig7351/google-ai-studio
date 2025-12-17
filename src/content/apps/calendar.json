@@ -1,0 +1,10 @@
+{
+    "name": "線上版行事曆",
+    "category": "Productivity",
+    "link": "https://ai.studio/apps/drive/1WHeY5PpJDHBzvV67VxJW6Hv6JGuMuses",
+    "images": [
+        "/apps/calendar1.png",
+        "/apps/calendar2.png"
+    ],
+    "prompt": "做一個線上版行事曆 行事曆上可以加入要做的事情"
+}
