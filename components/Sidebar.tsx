@@ -5,11 +5,9 @@ import {
   GraduationCap,
   CheckSquare,
   Users,
-  Wrench,
   Film,
   Camera,
   HeartPulse,
-  DollarSign,
   Plus,
   Box
 } from 'lucide-react';
@@ -29,11 +27,9 @@ const IconMap: Record<string, React.ElementType> = {
   GraduationCap,
   CheckSquare,
   Users,
-  Wrench,
   Film,
   Camera,
-  HeartPulse,
-  DollarSign
+  HeartPulse
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onSelectCategory, onOpenSubmit, isOpen }) => {

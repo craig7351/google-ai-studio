@@ -6,10 +6,8 @@ export const CATEGORIES = [
   { id: AppCategory.EDUCATION, icon: 'GraduationCap' },
   { id: AppCategory.PRODUCTIVITY, icon: 'CheckSquare' },
   { id: AppCategory.SOCIAL, icon: 'Users' },
-  { id: AppCategory.UTILITIES, icon: 'Wrench' },
   { id: AppCategory.ENTERTAINMENT, icon: 'Film' },
   { id: AppCategory.PHOTO_VIDEO, icon: 'Camera' },
   { id: AppCategory.HEALTH, icon: 'HeartPulse' },
-  { id: AppCategory.FINANCE, icon: 'DollarSign' },
 ];
 
