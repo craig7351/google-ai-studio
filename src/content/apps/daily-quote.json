@@ -1,0 +1,9 @@
+{
+    "name": "每日名言",
+    "category": "Lifestyle",
+    "link": "https://ai.studio/apps/drive/1le5OZFSP0o2RwdSFwu0UQ632he-sykea",
+    "images": [
+        "/apps/daily-quote.png"
+    ],
+    "prompt": "做一個極致優雅的每日名言 App。每天早上更新一句勵志名言或哲學短句。背景是隨機的高畫質風景攝影或抽象藝術圖。文字排版要像雜誌封面一樣精美，並提供「分享」按鈕生成圖片卡片。"
+}

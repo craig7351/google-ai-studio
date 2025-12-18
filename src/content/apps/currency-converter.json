@@ -1,0 +1,9 @@
+{
+    "name": "匯率換算器",
+    "category": "Utilities",
+    "link": "https://ai.studio/apps/drive/1MqZ8GpYjAEG_GD202OwG0EGlt1zOnjhK",
+    "images": [
+        "/apps/currency-converter.png"
+    ],
+    "prompt": "做一個極簡風格的即時匯率換算器。介面模仿機票或護照的設計質感。使用者可以同時查看三種貨幣的換算結果（例如台幣、美金、日幣）。數字輸入時要有流暢的跳動動畫。"
+}

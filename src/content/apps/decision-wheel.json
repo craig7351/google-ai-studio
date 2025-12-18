@@ -1,0 +1,9 @@
+{
+    "name": "選擇困難轉盤",
+    "category": "Entertainment",
+    "link": "https://ai.studio/apps/drive/1t1LleClmuEy2kQO_wkCXhUtNPo_T3w10",
+    "images": [
+        "/apps/decision-wheel.png"
+    ],
+    "prompt": "做一個解決選擇困難症的轉盤 App。使用者輸入選項（吃什麼、去哪裡），畫面會生成一個色彩繽紛的大轉盤。點擊「旋轉」後，轉盤快速旋轉並搭配音效，最後慢慢停在一個選項上並噴發彩帶。"
+}

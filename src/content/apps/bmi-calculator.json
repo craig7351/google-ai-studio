@@ -1,0 +1,10 @@
+{
+    "name": "BMI 計算器",
+    "category": "Health",
+    "link": "https://ai.studio/apps/drive/1WLBkamzngbKsTRK8VXjBYOaojJE1mSnm",
+    "images": [
+        "/apps/bmi-calculator1.png",
+        "/apps/bmi-calculator2.png"
+    ],
+    "prompt": "做一個健康指數計算器。使用者輸入身高體重後，用儀表板樣式顯示 BMI 值，並用不同顏色（藍、綠、黃、紅）區分體重狀態。旁邊提供簡單的每日飲水量建議與健康小提醒。"
+}

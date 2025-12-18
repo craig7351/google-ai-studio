@@ -1,0 +1,9 @@
+{
+    "name": "專業節拍器",
+    "category": "Utilities",
+    "link": "https://ai.studio/apps/drive/1MKHs5hXWq2Spgnu1hwxZmZpJyN4mhGq5",
+    "images": [
+        "/apps/metronome.png"
+    ],
+    "prompt": "做一個給音樂人用的專業節拍器。畫面中有一個擺動的機械指針，也可以切換成數位閃燈模式。使用者可以轉動旋鈕調整 BPM 速度，並選擇不同的拍號（4/4, 3/4 等）。"
+}
