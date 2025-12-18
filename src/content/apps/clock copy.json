@@ -1,0 +1,9 @@
+{
+    "name": "SVG動畫工具",
+    "category": "Education",
+    "link": "https://ai.studio/apps/drive/18qSnVdAiK89jJsu9c6FS_zYl6Vxii_ma",
+    "images": [
+        "/apps/svg.png"
+    ],
+    "prompt": "做一個線上 SVG 路徑動畫工具。使用者可以手繪一條線段，程式會自動將這條線轉化為 SVG path，並生成一段 CSS 讓一個圓點沿著這條線不斷滑動移動。支援匯出這段 HTML/CSS 代碼。"
+}

@@ -1,0 +1,9 @@
+{
+    "name": "番茄鐘計時器",
+    "category": "Productivity",
+    "link": "https://ai.studio/apps/drive/16DYi9q6PVI7YbfmwNDi_irxsf7s2XjCH",
+    "images": [
+        "/apps/clock.png"
+    ],
+    "prompt": "做一個唯美的番茄鐘計時器。當計時開始時，螢幕中心會有一顆小種子慢慢長成一棵樹，如果使用者中途離開或重置，樹就會枯萎。背景要隨著時間流逝有白晝與黑夜的漸層變化，並支援播放輕柔的森林環境音。"
+}

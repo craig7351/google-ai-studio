@@ -1,0 +1,10 @@
+{
+    "name": "酒吧調酒",
+    "category": "Entertainment",
+    "link": "https://ai.studio/apps/drive/1BCFydKvY4gLxn6bbu1yccwjnkpInuLQ8",
+    "images": [
+        "/apps/Bar1.png",
+        "/apps/Bar2.png"
+    ],
+    "prompt": "做一個精緻的雞尾酒調配 App。畫面中心有一個大轉盤，旋轉後隨機選出一款經典雞尾酒。畫面要顯示精美的水彩風格插圖、材料清單、以及調配步驟。配色要具備高級酒吧的視覺感。"
+}

@@ -1,0 +1,9 @@
+{
+    "name": "台灣股市動態視覺化工具",
+    "category": "Productivity",
+    "link": "https://ai.studio/apps/drive/12EcvbU3a0L8H_y22WjE24i0Q5ucmV8_M",
+    "images": [
+        "/apps/taiwan-stocks.png"
+    ],
+    "prompt": "做一個台灣股市動態視覺化工具。將熱門股票顯示為大大小小的圓球（氣泡），漲幅越大圓球越大且變紅色，跌幅越大則變綠色。圓球在螢幕內會互相碰撞漂浮，點擊圓球顯示當前價格線圖。"
+}

@@ -1,0 +1,9 @@
+{
+    "name": "虛擬貨幣動態視覺化工具",
+    "category": "Productivity",
+    "link": "https://ai.studio/apps/drive/1WHeY5PpJDHBzvV67VxJW6Hv6JGuMuses",
+    "images": [
+        "/apps/bitcoin.png"
+    ],
+    "prompt": "做一個虛擬貨幣動態視覺化工具。將熱門貨幣顯示為大大小小的圓球（氣泡），漲幅越大圓球越大且變綠色，跌幅越大則變紅色。圓球在螢幕內會互相碰撞漂浮，點擊圓球顯示當前價格線圖。"
+}
