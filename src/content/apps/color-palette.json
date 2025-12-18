@@ -1,0 +1,10 @@
+{
+    "name": "靈感配色產生器",
+    "category": "Design Tools",
+    "link": "https://ai.studio/apps/drive/17BuhomyYAzVYcIEziyeF1l6VXwTn1GtR",
+    "images": [
+        "/apps/color-palette1.png",
+        "/apps/color-palette2.png"
+    ],
+    "prompt": "做一個設計師愛用的配色產生器。按下空白鍵隨機生成五個搭配和諧的顏色，以垂直長條顯示。每個顏色顯示 Hex Code 與 RGB 數值。滑鼠懸停在顏色上可以點擊複製代碼，並提供「鎖定」按鈕，保留喜歡的顏色再重新生成其他顏色。"
+}

@@ -1,0 +1,10 @@
+{
+    "name": "習慣追蹤打卡",
+    "category": "Productivity",
+    "link": "https://ai.studio/apps/drive/1K9FD7RnwC8FP5hd6MJ-A6mOzdFgAqlKb",
+    "images": [
+        "/apps/habit-streak1.png",
+        "/apps/habit-streak2.png"
+    ],
+    "prompt": "做一個簡潔的習慣追蹤清單。使用者可以新增習慣目標（如：喝水、運動、閱讀），每天完成點擊打勾，會有令人滿足的微動畫與音效。連續完成天數（Streak）要有火焰燃燒的效果來激勵使用者保持紀錄，中斷則火焰熄滅。"
+}

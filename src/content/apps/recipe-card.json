@@ -1,0 +1,10 @@
+{
+    "name": "隨機食譜靈感卡",
+    "category": "Food & Drink",
+    "link": "https://ai.studio/apps/drive/1fxhXXwaRK2enmgXlTbS3trG5bWsqf6wq",
+    "images": [
+        "/apps/recipe-card1.png",
+        "/apps/recipe-card2.png"
+    ],
+    "prompt": "做一個解決「今天吃什麼」的隨機食譜 App。畫面呈現一個精緻的卡片堆疊，點擊「下一道」按鈕，卡片會滑出切換到新的料理（包含菜名、卡路里、準備時間與一張大圖）。點擊卡片本身可翻面查看簡易食譜。"
+}

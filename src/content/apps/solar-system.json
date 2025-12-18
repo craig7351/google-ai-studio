@@ -1,0 +1,10 @@
+{
+    "name": "互動式太陽系模型",
+    "category": "Education",
+    "link": "https://ai.studio/apps/drive/1WGhZaDZ5hEp_7bhA_DWJsYfzpod4TXjO",
+    "images": [
+        "/apps/solar-system1.png",
+        "/apps/solar-system2.png"
+    ],
+    "prompt": "做一個互動式的 2D/3D 太陽系模型網頁。八大行星繞著太陽公轉，軌道速度要模擬真實比例。使用者可以拖曳旋轉視角或縮放。滑鼠懸停在行星上會停止轉動並彈出該行星的詳細資訊卡片（直徑、公轉週期、溫度）。"
+}

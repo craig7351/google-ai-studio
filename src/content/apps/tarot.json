@@ -1,0 +1,10 @@
+{
+    "name": "AI 塔羅牌占卜",
+    "category": "Entertainment",
+    "link": "https://ai.studio/apps/drive/1UFW7PjS3cmZNPXybsby-VaYDsXoMRwl6",
+    "images": [
+        "/apps/tarot1.png",
+        "/apps/tarot2.png"
+    ],
+    "prompt": "做一個神秘風格的塔羅牌占卜 App。畫面中央有一疊背面精美的塔羅牌，使用者點擊後洗牌並抽出三張牌（過去、現在、未來）。翻牌時要有 3D 翻轉動畫，每張牌下方顯示牌義解釋。背景要是深紫色星空動態效果，帶有微微閃爍的星星。"
+}

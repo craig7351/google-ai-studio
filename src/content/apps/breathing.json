@@ -1,0 +1,9 @@
+{
+    "name": "極簡呼吸冥想",
+    "category": "Health & Lifestyle",
+    "link": "https://ai.studio/apps/drive/1OciNtFW-vtwmtktl1wqz1QXHhUgD2w4J",
+    "images": [
+        "/apps/breathing.png"
+    ],
+    "prompt": "做一個極簡風格的呼吸冥想引導 Web App。畫面中心有一個會隨呼吸節奏放大縮小的柔和圓形（吸氣變大、呼氣變小），背景色隨著圓形變化緩慢漸變（例如從藍色變為淺紫）。可以設定時長（1分鐘、3分鐘），結束後顯示一句心靈小語。"
+}

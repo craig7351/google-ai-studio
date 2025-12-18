@@ -1,0 +1,9 @@
+{
+    "name": "摩斯密碼翻譯器",
+    "category": "Utilities",
+    "link": "https://ai.studio/apps/drive/1r7EljKJezg9hcCt6EgdngnKJLdlvP4h9",
+    "images": [
+        "/apps/morse-code.png"
+    ],
+    "prompt": "做一個復古軍事風格的摩斯密碼轉換器。上半部是文字輸入框，下半部即時顯示對應的點劃符號（Morse Code）。提供一個大大的「播放」按鈕，點擊後會用嗶嗶聲播放出這段摩斯密碼，並伴隨虛擬的信號燈閃爍效果。"
+}

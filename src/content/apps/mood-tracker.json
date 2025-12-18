@@ -1,0 +1,10 @@
+{
+    "name": "每日心情像素日記",
+    "category": "Lifestyle",
+    "link": "https://ai.studio/apps/drive/1b8KGVzPstgpZ9Rg5HkyApLovkwEQBPS3",
+    "images": [
+        "/apps/mood-tracker1.png",
+        "/apps/mood-tracker2.png"
+    ],
+    "prompt": "做一個視覺化的心情日記 App。使用者可以從五種表情符號（開心、平靜、生氣、難過、焦慮）中選擇今日心情，並寫下一句話。首頁以「年度像素牆」方式呈現，每一個小格子代表一天，顏色對應當天心情，組成一張個人的情緒色彩圖譜。"
+}
