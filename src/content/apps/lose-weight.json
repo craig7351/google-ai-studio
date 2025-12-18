@@ -1,0 +1,13 @@
+{
+    "name": "每餐熱量筆記",
+    "category": "Health & Fitness",
+    "link": "https://ai.studio/apps/drive/1g7VhxBuAMFT6K39wDjVNJrgHgH5QArI0",
+    "images": [
+        "/apps/lose-weight1.png",
+        "/apps/lose-weight2.png",
+        "/apps/lose-weight3.png",
+        "/apps/lose-weight4.png",
+        "/apps/lose-weight5.png"
+    ],
+    "prompt": "每餐熱量筆記, 透過AI辨識一餐吃了幾卡路里,填入幾公斤 幾公分, 自動計算每日合理卡路里, AI給飲食建議"
+}

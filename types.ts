@@ -14,7 +14,6 @@ export enum AppCategory {
   EDUCATION = 'Education',
   PRODUCTIVITY = 'Productivity',
   SOCIAL = 'Social Networking',
-  UTILITIES = 'Utilities',
   HEALTH = 'Health & Fitness',
   ENTERTAINMENT = 'Entertainment',
   PHOTO_VIDEO = 'Photo & Video',
