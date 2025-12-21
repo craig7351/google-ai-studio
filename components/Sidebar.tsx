@@ -94,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onSelectCate
           </div>
           <div>
             <a
-              href="https://www.facebook.com/craig.huang.334/"
+              href="https://www.facebook.com/profile.php?id=61584339789020"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-blue-300 transition-colors"
