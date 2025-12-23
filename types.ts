@@ -17,5 +17,6 @@ export enum AppCategory {
   HEALTH = 'Health & Fitness',
   ENTERTAINMENT = 'Entertainment',
   PHOTO_VIDEO = 'Photo & Video',
-  LIFESTYLE = 'Lifestyle'
+  LIFESTYLE = 'Lifestyle',
+  USER_SUBMISSIONS = 'User Submissions'
 }

@@ -1,0 +1,479 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>川劇變臉大師</title>
+    <meta property="og:title" content="川劇變臉大師">
+    <meta property="og:description" content="快來體驗川劇變臉的魅力！滑動變臉、AI 創意設計，還有大師為您解讀臉譜奧秘。">
+    <meta property="og:image" content="https://i.imgur.com/9c0gJqF.jpg">
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #1c1917;
+            touch-action: none;
+            font-family: 'Noto Serif TC', serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #root {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .glass-panel {
+            background: rgba(28, 25, 23, 0.95);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(234, 179, 8, 0.3);
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-pop-in {
+            animation: popIn 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+        }
+
+        input::placeholder {
+            color: #78716c;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .safe-bottom {
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback, useRef } = React;
+
+        // 🔑 API Key (已內建，無縫切換模式)
+        const HARDCODED_API_KEY = "";
+
+        const INITIAL_MASKS = [
+            { id: 1, baseColor: '#DC2626', accentColor: '#111827', decoration: '#F59E0B', secondaryDeco: '#FCD34D', name: '忠勇 (紅)', type: 'loyal', symbol: 'fire' },
+            { id: 2, baseColor: '#111827', accentColor: '#F3F4F6', decoration: '#DC2626', secondaryDeco: '#9CA3AF', name: '剛直 (黑)', type: 'bold', symbol: 'fire' },
+            { id: 3, baseColor: '#2563EB', accentColor: '#111827', decoration: '#EF4444', secondaryDeco: '#60A5FA', name: '剛強 (藍)', type: 'fierce', symbol: 'fire' },
+            { id: 4, baseColor: '#D97706', accentColor: '#991B1B', decoration: '#FFFFFF', secondaryDeco: '#FBBF24', name: '神仙 (金)', type: 'god', symbol: 'fire' },
+            { id: 5, baseColor: '#F3F4F6', accentColor: '#111827', decoration: '#4B5563', secondaryDeco: '#D1D5DB', name: '陰險 (白)', type: 'cunning', symbol: 'fire' },
+            { id: 6, baseColor: '#FCD34D', accentColor: '#EF4444', decoration: '#FFFFFF', secondaryDeco: '#B45309', name: '孫悟空 (美猴王)', type: 'monkey', symbol: 'peach' },
+            { id: 7, baseColor: '#111827', accentColor: '#FFFFFF', decoration: '#F3F4F6', secondaryDeco: '#DC2626', name: '包公 (鐵面無私)', type: 'justice', symbol: 'moon' },
+            { id: 8, baseColor: '#DC2626', accentColor: '#111827', decoration: '#FFFFFF', secondaryDeco: '#1F2937', name: '姜維 (忠膽)', type: 'wisdom', symbol: 'yinyang' },
+            { id: 9, baseColor: '#EF4444', accentColor: '#FCD34D', decoration: '#111827', secondaryDeco: '#F59E0B', name: '財神 (招財)', type: 'wealth', symbol: 'coin' },
+            { id: 10, baseColor: '#7C3AED', accentColor: '#FCD34D', decoration: '#4C1D95', secondaryDeco: '#A78BFA', name: '肅穆 (紫)', type: 'solemn', symbol: 'fire' },
+            { id: 11, baseColor: '#047857', accentColor: '#111827', decoration: '#FCD34D', secondaryDeco: '#34D399', name: '勇猛 (綠)', type: 'brave', symbol: 'fire' },
+            { id: 12, baseColor: '#FCD34D', accentColor: '#991B1B', decoration: '#111827', secondaryDeco: '#F59E0B', name: '兇暴 (黃)', type: 'cruel', symbol: 'fire' },
+        ];
+
+        const LOCAL_FORTUNES = {
+            red: ["紅光滿面，運勢如虹。今日宜展現熱情，必有收穫。", "丹心一片，忠義千秋。堅持正道，貴人自來。", "紅臉顯威，氣勢如火。大膽行動，無往不利。"],
+            black: ["黑臉無私，剛正不阿。今日宜明辨是非，切勿隨波逐流。", "鐵面無私，正氣凜然。堅持原則，自有公道。", "沉穩如山，不怒自威。靜觀其變，後發制人。"],
+            blue: ["藍臉驍勇，膽大心細。面對挑戰，勇往直前。", "靛藍顯智，謀定後動。今日適合規劃長遠目標。", "剛強勇猛，勢如破竹。困難當前，正好磨練心志。"],
+            gold: ["金光閃閃，財運亨通。今日有意外之財，或有良機降臨。", "神威顯赫，萬事如意。心存善念，福報自來。", "金面護體，百毒不侵。保持自信，光芒萬丈。"],
+            white: ["白臉機智，能屈能伸。今日宜智取，不宜力敵。", "心思縝密，算無遺策。冷靜分析，必能化險為夷。", "變化多端，難以捉摸。隨機應變，方為上策。"],
+            green: ["綠林好漢，義薄雲天。今日適合與朋友聚會，增進感情。", "勇猛直率，快意恩仇。切記三思而後行，以免衝動誤事。", "草莽英雄，生機勃勃。新的機會正在萌芽，請把握。"],
+            purple: ["紫氣東來，貴不可言。今日氣場強大，適合談判或決策。", "肅穆莊嚴，令人敬畏。保持威儀，小人自退。", "高貴神秘，深不可測。內心的力量是你最強的武器。"],
+            default: ["臉譜變幻，人生如戲。演好自己的角色，就是精彩。", "千變萬化，不離其宗。保持初心，方得始終。", "戲如人生，人生如戲。笑看風雲，自在隨心。"]
+        };
+
+        class EnhancedOperaAudioEngine {
+            constructor() {
+                this.ctx = null; this.masterGain = null; this.bgmAudio = new Audio(); this.bgmAudio.loop = true; this.bgmLoaded = false; this.isPlayingProcedural = false; this.nextNoteTime = 0; this.timerID = null; this.beatCount = 0; this.tempo = 140;
+                this.melodyPattern = [784, 880, 1046, 1175, 1318, 1568, 1760, 2093, 2093, 1760, 1568, 1318, 1175, 1046, 880, 784, 659, 0, 659, 0, 587, 0, 523, 0, 392, 392, 523, 523, 587, 587, 659, 659];
+            }
+            init() { const AudioContext = window.AudioContext || window.webkitAudioContext; if (!AudioContext) return false; this.ctx = new AudioContext(); this.masterGain = this.ctx.createGain(); this.masterGain.gain.value = 0.3; this.masterGain.connect(this.ctx.destination); return true; }
+            resume() { if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); }
+            setCustomBGM(file) { const url = URL.createObjectURL(file); this.bgmAudio.src = url; this.bgmAudio.play().catch(e => console.log("Playback prevented:", e)); this.bgmLoaded = true; this.stopProceduralBGM(); }
+            startBGM() { this.resume(); if (this.bgmLoaded && this.bgmAudio.src) { this.bgmAudio.play().catch(e => console.error("BGM Play Error:", e)); } else { this.startProceduralBGM(); } }
+            stopBGM() { this.bgmAudio.pause(); this.stopProceduralBGM(); }
+            startProceduralBGM() { if (this.isPlayingProcedural) return; if (!this.ctx) this.init(); this.isPlayingProcedural = true; this.beatCount = 0; this.nextNoteTime = this.ctx.currentTime + 0.1; this.scheduleNote(); }
+            stopProceduralBGM() { this.isPlayingProcedural = false; if (this.timerID) cancelAnimationFrame(this.timerID); }
+            playInstrument(type, time) { if (!this.ctx) return; const t = time; if (type === 'gong') { const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain(); osc.frequency.setValueAtTime(150, t); osc.frequency.exponentialRampToValueAtTime(100, t + 1.5); const osc2 = this.ctx.createOscillator(); osc2.type = 'square'; osc2.frequency.setValueAtTime(200, t); const gain2 = this.ctx.createGain(); gain2.gain.value = 0.15; osc2.connect(gain2); gain2.connect(gain); gain.gain.setValueAtTime(0.01, t); gain.gain.linearRampToValueAtTime(0.6, t + 0.05); gain.gain.exponentialRampToValueAtTime(0.001, t + 2.5); osc.connect(gain); gain.connect(this.masterGain); osc.start(t); osc2.start(t); osc.stop(t + 2.5); osc2.stop(t + 2.5); } else if (type === 'woodblock') { const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain(); osc.frequency.setValueAtTime(800, t); gain.gain.setValueAtTime(0.7, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1); osc.connect(gain); gain.connect(this.masterGain); osc.start(t); osc.stop(t + 0.1); } else if (type === 'cymbals') { const bufferSize = this.ctx.sampleRate * 0.5; const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate); const data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.3; const noise = this.ctx.createBufferSource(); noise.buffer = buffer; const filter = this.ctx.createBiquadFilter(); filter.type = 'bandpass'; filter.frequency.value = 5000; filter.Q.value = 1; const gain = this.ctx.createGain(); gain.gain.setValueAtTime(0.3, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5); noise.connect(filter); filter.connect(gain); gain.connect(this.masterGain); noise.start(t); } }
+            playMelodyNote(noteFreq, time) { if (!this.ctx || noteFreq === 0) return; const t = time; const osc = this.ctx.createOscillator(); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(noteFreq, t); const filter = this.ctx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.setValueAtTime(2000, t); const gain = this.ctx.createGain(); gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(0.15, t + 0.05); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3); osc.connect(filter); filter.connect(gain); gain.connect(this.masterGain); osc.start(t); osc.stop(t + 0.3); }
+            playFaceChange() { if (!this.ctx) return; this.resume(); const t = this.ctx.currentTime; const bufferSize = this.ctx.sampleRate * 0.4; const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate); const data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1; const noise = this.ctx.createBufferSource(); noise.buffer = buffer; const filter = this.ctx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.setValueAtTime(200, t); filter.frequency.linearRampToValueAtTime(4000, t + 0.2); const gain = this.ctx.createGain(); gain.gain.setValueAtTime(0.8, t); gain.gain.linearRampToValueAtTime(0, t + 0.3); noise.connect(filter); filter.connect(gain); gain.connect(this.masterGain); noise.start(t); this.playInstrument('woodblock', t + 0.15); this.playInstrument('gong', t + 0.15); }
+            scheduleNote() { const lookahead = 0.1; const secondsPerBeat = 60.0 / this.tempo; while (this.nextNoteTime < this.ctx.currentTime + lookahead) { const beatIndex = this.beatCount % 32; if (this.beatCount % 4 === 0) { this.playInstrument('gong', this.nextNoteTime); } if (this.beatCount % 2 === 0) { this.playInstrument('woodblock', this.nextNoteTime); } if (this.beatCount % 8 === 0) { this.playInstrument('cymbals', this.nextNoteTime); } const note = this.melodyPattern[beatIndex % this.melodyPattern.length]; this.playMelodyNote(note, this.nextNoteTime); this.nextNoteTime += secondsPerBeat / 2; this.beatCount++; } this.timerID = requestAnimationFrame(this.scheduleNote.bind(this)); }
+        }
+        const audioEngine = new EnhancedOperaAudioEngine();
+
+        const OperaMask = ({ maskData }) => {
+            const { baseColor, accentColor, decoration, secondaryDeco, symbol } = maskData;
+            const renderSymbol = () => {
+                switch (symbol) {
+                    case 'moon': return <path d="M-10,-20 Q0,-10 10,-20 Q5,-5 -10,-5 Q-20,-10 -10,-20" fill="#FFF" stroke="none" />;
+                    case 'yinyang': return <g transform="scale(0.8)"><circle cx="0" cy="-15" r="12" fill="none" stroke="#FFFFFF" strokeWidth="1" /><path d="M0,-27 A6,6 0 0,1 0,-15 A6,6 0 0,0 0,-3 A12,12 0 0,1 0,-27" fill="#FFFFFF" /><path d="M0,-27 A12,12 0 0,0 0,-3 A6,6 0 0,1 0,-15 A6,6 0 0,0 0,-27" fill="#000000" /><circle cx="0" cy="-21" r="2" fill="#000000" /><circle cx="0" cy="-9" r="2" fill="#FFFFFF" /></g>;
+                    case 'coin': return <g transform="translate(0, -15)"><circle cx="0" cy="0" r="10" fill="none" stroke="#FCD34D" strokeWidth="2" /><rect x="-4" y="-4" width="8" height="8" fill="none" stroke="#FCD34D" strokeWidth="2" /></g>;
+                    case 'peach': return <path d="M0,-5 Q10,-25 20,-15 Q25,-5 0,5 Q-25,-5 -20,-15 Q-10,-25 0,-5" fill="#FCA5A5" stroke="#991B1B" strokeWidth="1" transform="translate(0,-15)" />;
+                    case 'flower': return <g transform="translate(0, -15)"><circle cx="0" cy="0" r="4" fill="#FCD34D" /><circle cx="0" cy="-8" r="4" fill="#F9A8D4" /><circle cx="8" cy="0" r="4" fill="#F9A8D4" /><circle cx="0" cy="8" r="4" fill="#F9A8D4" /><circle cx="-8" cy="0" r="4" fill="#F9A8D4" /></g>;
+                    case 'scroll': return <path d="M-15,-15 Q0,-25 15,-15 Q15,-5 5,-5 Q-5,-5 -15,-15" fill="none" stroke="#FFFFFF" strokeWidth="2" />;
+                    case 'fire': default: return <><path d="M0,-35 C-25,-25 -30,-5 -15,5 C-5,10 5,10 15,5 C30,-5 25,-25 0,-35" fill={decoration} stroke="#000" strokeWidth="1.5" /><circle cx="0" cy="-15" r="6" fill={accentColor} stroke="#000" strokeWidth="1" /><circle cx="0" cy="-15" r="3" fill={secondaryDeco} /></>;
+                }
+            };
+            return (
+                <svg viewBox="0 0 200 260" className="w-full h-full drop-shadow-2xl">
+                    <defs><linearGradient id={`grad-${baseColor}`} x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor={baseColor} style={{ stopOpacity: 1 }} /><stop offset="50%" stopColor={baseColor} style={{ stopOpacity: 1 }} /><stop offset="100%" stopColor={baseColor} style={{ stopOpacity: 0.8 }} /></linearGradient></defs>
+                    <path d="M30,80 Q20,160 100,240 Q180,160 170,80 Q170,10 100,10 Q30,10 30,80" fill={`url(#grad-${baseColor})`} stroke="#000" strokeWidth="2" />
+                    <g transform="translate(100, 60)"><path d="M-15,5 Q-35,25 -55,-5" fill="none" stroke={decoration} strokeWidth="4" strokeLinecap="round" /><path d="M-20,10 Q-40,30 -60,0" fill="none" stroke={secondaryDeco} strokeWidth="3" strokeLinecap="round" /><path d="M15,5 Q35,25 55,-5" fill="none" stroke={decoration} strokeWidth="4" strokeLinecap="round" /><path d="M20,10 Q40,30 60,0" fill="none" stroke={secondaryDeco} strokeWidth="3" strokeLinecap="round" /><circle cx="-55" cy="-5" r="3" fill={secondaryDeco} stroke="#000" strokeWidth="1" /><circle cx="55" cy="-5" r="3" fill={secondaryDeco} stroke="#000" strokeWidth="1" />{renderSymbol()}</g>
+                    <path d="M30,90 Q40,40 95,65 L95,110 Q50,120 30,90 Z" fill={accentColor} stroke="#000" strokeWidth="1" /><path d="M170,90 Q160,40 105,65 L105,110 Q150,120 170,90 Z" fill={accentColor} stroke="#000" strokeWidth="1" /><path d="M35,92 Q45,45 90,68 L90,108 Q50,115 35,92 Z" fill={secondaryDeco} stroke="none" opacity="0.5" /><path d="M165,92 Q155,45 110,68 L110,108 Q150,115 165,92 Z" fill={secondaryDeco} stroke="none" opacity="0.5" />
+                    <path d="M25,80 Q50,30 95,60" fill="none" stroke="#000" strokeWidth="6" strokeLinecap="round" /><path d="M28,78 Q53,28 98,58" fill="none" stroke={decoration} strokeWidth="2" strokeLinecap="round" /><path d="M175,80 Q150,30 105,60" fill="none" stroke="#000" strokeWidth="6" strokeLinecap="round" /><path d="M172,78 Q147,28 102,58" fill="none" stroke={decoration} strokeWidth="2" strokeLinecap="round" />
+                    <path d="M40,95 Q65,80 85,100 Q65,115 40,105 Z" fill="#FFF" stroke="#000" strokeWidth="1" /><path d="M160,95 Q135,80 115,100 Q135,115 160,105 Z" fill="#FFF" stroke="#000" strokeWidth="1" /><circle cx="65" cy="100" r="5" fill="#000" /><circle cx="135" cy="100" r="5" fill="#000" /><circle cx="67" cy="98" r="2" fill="#FFF" /><circle cx="137" cy="98" r="2" fill="#FFF" />
+                    <path d="M92,65 L108,65 L110,140 Q100,155 90,140 Z" fill={decoration} stroke="#000" strokeWidth="1.5" /><path d="M95,68 L105,68 L107,138 Q100,150 93,138 Z" fill={secondaryDeco} stroke="none" /><path d="M100,65 L100,145" fill="none" stroke="#000" strokeWidth="1" opacity="0.3" />
+                    <path d="M25,145 Q45,150 40,190" fill="none" stroke={decoration} strokeWidth="3" strokeLinecap="round" /><path d="M30,150 Q50,155 45,195" fill="none" stroke={secondaryDeco} strokeWidth="2" strokeLinecap="round" /><path d="M175,145 Q155,150 160,190" fill="none" stroke={decoration} strokeWidth="3" strokeLinecap="round" /><path d="M170,150 Q150,155 155,195" fill="none" stroke={secondaryDeco} strokeWidth="2" strokeLinecap="round" /><path d="M20,120 C30,110 50,110 40,130 C30,150 10,130 20,120" fill="none" stroke={decoration} strokeWidth="2" /><path d="M180,120 C170,110 150,110 160,130 C170,150 190,130 180,120" fill="none" stroke={decoration} strokeWidth="2" />
+                    <path d="M85,165 Q100,175 115,165" fill="#333" /><path d="M80,160 Q100,155 120,160" fill="none" stroke={accentColor} strokeWidth="2" /><path d="M60,180 Q80,260 100,250 Q120,260 140,180" fill="none" stroke="#111" strokeWidth="25" strokeLinecap="round" opacity="0.9" /><path d="M70,180 Q90,250 100,240 Q110,250 130,180" fill="none" stroke="#333" strokeWidth="15" strokeLinecap="round" /><path d="M100,170 L100,190" fill="none" stroke="#000" strokeWidth="2" />
+                </svg>
+            );
+        };
+
+        const Fan = ({ isVisible }) => {
+            const ribs = Array.from({ length: 24 }).map((_, i) => {
+                const angle = -70 + (i * (140 / 23)); const rad = (angle * Math.PI) / 180;
+                const x1 = 200; const y1 = 380; const length = 320;
+                const x2 = x1 + Math.sin(rad) * length; const y2 = y1 - Math.cos(rad) * length;
+                const foldX = x1 + Math.sin(rad + 0.04) * length; const foldY = y1 - Math.cos(rad + 0.04) * length;
+                return (<g key={i}><line x1={x1} y1={y1} x2={foldX} y2={foldY} stroke="rgba(0,0,0,0.1)" strokeWidth="1.5" /><line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#FDE68A" strokeWidth="3" /></g>);
+            });
+            return (
+                <div className={`absolute inset-0 pointer-events-none transition-all duration-300 origin-bottom-right ${isVisible ? 'translate-y-0 rotate-0 opacity-100 scale-100' : 'translate-y-full rotate-12 opacity-0 scale-90'}`} style={{ zIndex: 20, transitionTimingFunction: isVisible ? 'cubic-bezier(0.18, 0.89, 0.32, 1.28)' : 'cubic-bezier(0.6, -0.28, 0.74, 0.05)' }}>
+                    <svg viewBox="0 0 400 500" className="w-full h-full">
+                        <defs>
+                            <linearGradient id="fanGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style={{ stopColor: '#DC2626', stopOpacity: 1 }} /><stop offset="20%" style={{ stopColor: '#EF4444', stopOpacity: 1 }} /><stop offset="50%" style={{ stopColor: '#DC2626', stopOpacity: 1 }} /><stop offset="80%" style={{ stopColor: '#EF4444', stopOpacity: 1 }} /><stop offset="100%" style={{ stopColor: '#DC2626', stopOpacity: 1 }} /></linearGradient>
+                            <linearGradient id="speedLineGradient" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stopColor="#FFF" stopOpacity="0" /><stop offset="50%" stopColor="#FFF" stopOpacity="0.8" /><stop offset="100%" stopColor="#FFF" stopOpacity="0" /></linearGradient>
+                            <linearGradient id="sleeveGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#B91C1C" /><stop offset="100%" stopColor="#7F1D1D" /></linearGradient>
+                            <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#eec0a6" /><stop offset="100%" stopColor="#dca688" /></linearGradient>
+                        </defs>
+                        {isVisible && (<g opacity="0.6"><path d="M20,380 Q100,200 20,50" stroke="url(#speedLineGradient)" strokeWidth="6" fill="none" /><path d="M380,380 Q300,200 380,50" stroke="url(#speedLineGradient)" strokeWidth="6" fill="none" /><path d="M200,400 L200,50" stroke="url(#speedLineGradient)" strokeWidth="3" fill="none" /></g>)}
+
+                        {/* 手部與袖子 - 繪製於扇子下方 */}
+                        <g transform="translate(0,0)">
+                            {/* 寬大袖口 */}
+                            <path d="M240,360 Q380,380 400,500 L180,500 Q180,450 160,380 Z" fill="url(#sleeveGrad)" stroke="#5a0f0f" strokeWidth="2" />
+                            {/* 金色滾邊 */}
+                            <path d="M160,380 Q200,400 240,360" fill="none" stroke="#FCD34D" strokeWidth="6" strokeLinecap="round" />
+                            {/* 手掌 */}
+                            <g transform="translate(200, 380) rotate(-10)">
+                                {/* 拇指 */}
+                                <ellipse cx="10" cy="-5" rx="14" ry="18" fill="url(#skinGrad)" stroke="#c48b6f" strokeWidth="1" transform="rotate(-20)" />
+                                {/* 手指 (握住扇柄) */}
+                                <ellipse cx="25" cy="10" rx="12" ry="16" fill="url(#skinGrad)" stroke="#c48b6f" strokeWidth="1" transform="rotate(-5)" />
+                                <ellipse cx="22" cy="25" rx="12" ry="16" fill="url(#skinGrad)" stroke="#c48b6f" strokeWidth="1" transform="rotate(5)" />
+                                <ellipse cx="15" cy="38" rx="12" ry="16" fill="url(#skinGrad)" stroke="#c48b6f" strokeWidth="1" transform="rotate(15)" />
+                                <ellipse cx="5" cy="48" rx="12" ry="16" fill="url(#skinGrad)" stroke="#c48b6f" strokeWidth="1" transform="rotate(25)" />
+                            </g>
+                        </g>
+
+                        <g transform="translate(0, 0)">
+                            <path d="M0,380 L400,380 L400,50 Q200,-50 0,50 Z" fill="url(#fanGradient)" stroke="none" />
+                            {ribs}
+                            <path d="M0,380 L400,380 L400,50 Q200,-50 0,50 Z" fill="none" stroke="#B91C1C" strokeWidth="3" />
+                            <text x="200" y="200" textAnchor="middle" fill="#FCD34D" fontSize="50" fontWeight="bold" fontFamily="serif" style={{ textShadow: '2px 2px 0 rgba(0,0,0,0.3)' }}>變</text>
+                        </g>
+                    </svg>
+                </div>
+            );
+        };
+
+        const SwipeController = ({ onTrigger, onInteraction }) => {
+            const [dragX, setDragX] = useState(0);
+            const [isDragging, setIsDragging] = useState(false);
+            const trackRef = useRef(null);
+            const maxDragRef = useRef(0);
+            useEffect(() => { if (trackRef.current) maxDragRef.current = trackRef.current.clientWidth - 56 - 8; }, []);
+            const handleStart = () => { onInteraction && onInteraction(); setIsDragging(true); };
+            const handleMove = useCallback((e) => {
+                if (!isDragging || !trackRef.current) return;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const trackRect = trackRef.current.getBoundingClientRect();
+                let newX = clientX - trackRect.left - 32;
+                const maxDrag = maxDragRef.current > 0 ? maxDragRef.current : 200;
+                if (newX < 0) newX = 0; if (newX > maxDrag) newX = maxDrag;
+                setDragX(newX);
+            }, [isDragging]);
+            const handleEnd = useCallback(() => {
+                if (!isDragging) return;
+                setIsDragging(false);
+                const maxDrag = maxDragRef.current > 0 ? maxDragRef.current : 200;
+                if (dragX > maxDrag * 0.8) onTrigger();
+                setDragX(0);
+            }, [isDragging, dragX, onTrigger]);
+            useEffect(() => {
+                if (isDragging) {
+                    window.addEventListener('mousemove', handleMove); window.addEventListener('mouseup', handleEnd);
+                    window.addEventListener('touchmove', handleMove); window.addEventListener('touchend', handleEnd);
+                } else {
+                    window.removeEventListener('mousemove', handleMove); window.removeEventListener('mouseup', handleEnd);
+                    window.removeEventListener('touchmove', handleMove); window.removeEventListener('touchend', handleEnd);
+                }
+                return () => {
+                    window.removeEventListener('mousemove', handleMove); window.removeEventListener('mouseup', handleEnd);
+                    window.removeEventListener('touchmove', handleMove); window.removeEventListener('touchend', handleEnd);
+                };
+            }, [isDragging, handleMove, handleEnd]);
+            return (
+                <div className="relative w-full h-14 bg-stone-800 rounded-full border border-yellow-600 flex items-center px-1 select-none overflow-hidden shadow-lg" ref={trackRef}>
+                    <div className="absolute inset-0 flex items-center justify-center text-yellow-600/30 font-bold tracking-widest pointer-events-none animate-pulse text-sm">滑動變臉 &gt;&gt;&gt;</div>
+                    <div className="absolute right-1 w-12 h-12 rounded-full border border-yellow-600/50 flex items-center justify-center bg-stone-900/50"><span className="text-yellow-600 font-serif font-bold text-lg">B</span></div>
+                    <div className="absolute left-1 w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 border border-yellow-200 shadow-lg z-10 flex items-center justify-center cursor-grab active:cursor-grabbing" style={{ transform: `translateX(${dragX}px)`, transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }} onMouseDown={handleStart} onTouchStart={handleStart}><span className="text-stone-900 font-serif font-bold text-lg">A</span></div>
+                </div>
+            )
+        }
+
+        const App = () => {
+            const [masks, setMasks] = useState(INITIAL_MASKS);
+            const [currentMaskIndex, setCurrentMaskIndex] = useState(0);
+            const [isChanging, setIsChanging] = useState(false);
+            const [combo, setCombo] = useState(0);
+            const [textEffect, setTextEffect] = useState('');
+            const [isMuted, setIsMuted] = useState(false);
+            const [hasStarted, setHasStarted] = useState(false);
+            const [showStartScreen, setShowStartScreen] = useState(true);
+            const [aiPrompt, setAiPrompt] = useState('');
+            const [isGenerating, setIsGenerating] = useState(false);
+            const [isReading, setIsReading] = useState(false);
+            const [fortuneText, setFortuneText] = useState('');
+            const [showFortune, setShowFortune] = useState(false);
+            const [showFlash, setShowFlash] = useState(false);
+            const fileInputRef = useRef(null);
+
+            const getApiKey = () => HARDCODED_API_KEY;
+
+            const handleStartGame = useCallback(async () => {
+                try {
+                    const elem = document.documentElement;
+                    if (elem.requestFullscreen) await elem.requestFullscreen();
+                    else if (elem.webkitRequestFullscreen) await elem.webkitRequestFullscreen();
+                } catch (err) { }
+                audioEngine.init();
+                if (!isMuted) audioEngine.startBGM();
+                setHasStarted(true);
+                setShowStartScreen(false);
+            }, [isMuted]);
+
+            const toggleMute = (e) => {
+                e.stopPropagation();
+                if (isMuted) { setIsMuted(false); audioEngine.startBGM(); }
+                else { setIsMuted(true); audioEngine.stopBGM(); }
+            };
+
+            const handleInteractionStart = () => {
+                if (!hasStarted) { setHasStarted(true); if (!isMuted) audioEngine.startBGM(); } else { audioEngine.resume(); }
+            };
+
+            const handleMusicUpload = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    audioEngine.setCustomBGM(file);
+                    if (isMuted) setIsMuted(false);
+                }
+            };
+
+            const changeFace = useCallback(() => {
+                if (isChanging) return;
+                setShowFortune(false);
+                if (!isMuted) audioEngine.playFaceChange();
+                setIsChanging(true);
+                setCombo(c => c + 1);
+                let nextIndex;
+                do { nextIndex = Math.floor(Math.random() * masks.length); } while (nextIndex === currentMaskIndex && masks.length > 1);
+                const sounds = ['哈!', '變!', '嘿!', '吼!'];
+                setTextEffect(sounds[Math.floor(Math.random() * sounds.length)]);
+                setTimeout(() => { setCurrentMaskIndex(nextIndex); setShowFlash(true); setTimeout(() => setShowFlash(false), 50); }, 100);
+                setTimeout(() => { setIsChanging(false); setTextEffect(''); }, 300);
+            }, [isChanging, currentMaskIndex, isMuted, masks]);
+
+            // 模擬 AI 生成 (當 API 失敗時)
+            const mockGenerateMask = (prompt) => {
+                let hash = 0;
+                for (let i = 0; i < prompt.length; i++) hash = prompt.charCodeAt(i) + ((hash << 5) - hash);
+                const color = '#' + ((hash & 0x00FFFFFF).toString(16).padStart(6, '0'));
+                const invertedColor = '#' + ((0xFFFFFF ^ (hash & 0x00FFFFFF)).toString(16).padStart(6, '0'));
+                const symbols = ['fire', 'water', 'moon', 'sun', 'star', 'dragon'];
+                const symbol = symbols[Math.abs(hash) % symbols.length];
+                return {
+                    baseColor: color, accentColor: invertedColor, decoration: '#FFFFFF', secondaryDeco: '#FCD34D',
+                    name: `${prompt}`, type: 'custom', symbol: symbol
+                };
+            };
+
+            // 模擬 AI 解籤 (當 API 失敗時)
+            const mockInterpret = (mask) => {
+                let category = 'default';
+                if (mask.baseColor.includes('DC2626')) category = 'red';
+                else if (mask.baseColor.includes('111827')) category = 'black';
+                else if (mask.baseColor.includes('2563EB')) category = 'blue';
+                else if (mask.baseColor.includes('D97706')) category = 'gold';
+                else if (mask.baseColor.includes('F3F4F6')) category = 'white';
+                else if (mask.baseColor.includes('7C3AED')) category = 'purple';
+                else if (mask.baseColor.includes('047857')) category = 'green';
+                const fortunes = LOCAL_FORTUNES[category] || LOCAL_FORTUNES['default'];
+                return fortunes[Math.floor(Math.random() * fortunes.length)];
+            };
+
+            const executeAIAction = async (actionType) => {
+                const apiKey = getApiKey();
+
+                // === 雙重核心邏輯 ===
+
+                if (actionType === 'generate') {
+                    if (!aiPrompt.trim()) return;
+                    setIsGenerating(true);
+                    handleInteractionStart();
+
+                    try {
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: `Create a mask for: ${aiPrompt}` }] }],
+                                systemInstruction: { parts: [{ text: `You are a Sichuan Opera Face Design Expert. Generate a new mask configuration JSON. Fields: baseColor(Hex), accentColor(Hex), decoration(Hex), secondaryDeco(Hex), name(Chinese), type(English personality), symbol(one of: ['moon', 'yinyang', 'coin', 'peach', 'flower', 'scroll', 'fire']). Return JSON only.` }] }
+                            })
+                        });
+                        if (!response.ok) throw new Error("API Error");
+                        const data = await response.json();
+                        let text = data.candidates[0].content.parts[0].text;
+                        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+                        const newMask = { ...JSON.parse(text), id: Date.now() };
+                        setMasks(prev => [...prev, newMask]);
+                        performFaceChange(masks.length);
+                    } catch (error) {
+                        // 靜默失敗，切換模擬，不顯示任何錯誤訊息
+                        const mockMask = { ...mockGenerateMask(aiPrompt), id: Date.now() };
+                        setMasks(prev => [...prev, mockMask]);
+                        performFaceChange(masks.length);
+                    } finally { setIsGenerating(false); setAiPrompt(''); }
+
+                } else if (actionType === 'interpret') {
+                    setIsReading(true); setShowFortune(true); setFortuneText('大師掐指一算中...'); handleInteractionStart();
+                    try {
+                        const currentMask = masks[currentMaskIndex];
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ contents: [{ parts: [{ text: `The user is looking at a Sichuan Opera mask named "${currentMask.name}" (${currentMask.type}). Generate a short, poetic, auspicious fortune telling message (max 30 words) in Traditional Chinese.` }] }] })
+                        });
+                        if (!response.ok) throw new Error("API Error");
+                        const data = await response.json();
+                        setFortuneText(data.candidates[0].content.parts[0].text);
+                    } catch (error) {
+                        // 靜默失敗，切換模擬
+                        setFortuneText(mockInterpret(masks[currentMaskIndex]));
+                    } finally { setIsReading(false); }
+                }
+            };
+
+            const performFaceChange = (targetIndex) => {
+                setTimeout(() => {
+                    if (!isMuted) audioEngine.playFaceChange();
+                    setIsChanging(true);
+                    setCombo(c => c + 1);
+                    setTextEffect('AI 降臨!');
+                    setTimeout(() => {
+                        setCurrentMaskIndex(targetIndex);
+                        setShowFlash(true);
+                        setTimeout(() => setShowFlash(false), 50);
+                    }, 100);
+                    setTimeout(() => {
+                        setIsChanging(false);
+                        setTextEffect('');
+                    }, 300);
+                }, 100);
+            };
+
+            return (
+                <div className="flex flex-col w-full h-full relative bg-stone-900">
+                    <div className="absolute inset-0 opacity-10 pointer-events-none z-0"><svg width="100%" height="100%"><pattern id="pattern-circles" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="10" fill="none" stroke="#FCD34D" strokeWidth="2" /></pattern><rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-circles)" /></svg></div>
+
+                    <input type="file" ref={fileInputRef} accept="audio/*" onChange={handleMusicUpload} />
+
+                    {showStartScreen ? (
+                        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-stone-900 text-yellow-500 font-serif p-4">
+                            <div className="text-center space-y-6 p-8 rounded-2xl border-2 border-yellow-600/30 bg-stone-800/50 shadow-2xl backdrop-blur max-w-sm w-full animate-pop-in">
+                                <h1 className="text-5xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-500 animate-pulse">川劇變臉</h1>
+                                <div className="pt-8"><button onClick={handleStartGame} className="w-full px-8 py-4 text-xl bg-gradient-to-r from-red-600 to-red-800 text-white rounded-full border-2 border-yellow-500/50 shadow-lg active:scale-95 transition-transform">點擊開始</button></div>
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            {/* 頭部固定 */}
+                            <header className="flex-none w-full py-2 pt-safe-top text-center relative flex flex-col items-center justify-center z-10 shrink-0">
+                                <h1 className="text-3xl font-extrabold text-yellow-500 tracking-wider drop-shadow-lg mt-2" style={{ fontFamily: '"Noto Serif TC", serif' }}>川劇變臉</h1>
+                                <div className="absolute right-4 top-4 flex gap-2">
+                                    <button onClick={() => fileInputRef.current.click()} className="p-2 rounded-full border bg-stone-800 border-yellow-600 text-yellow-500" title="上傳自訂音樂">
+                                        🎵
+                                    </button>
+                                    <button onClick={toggleMute} className={`p-2 rounded-full border ${isMuted ? "bg-stone-800 border-stone-600 text-stone-500" : "bg-stone-800 border-yellow-600 text-yellow-500"}`}>
+                                        {isMuted ? <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v6a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path></svg> : <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>}
+                                    </button>
+                                </div>
+                            </header>
+
+                            {/* 中間舞台區：自動縮放 */}
+                            <div className="flex-1 w-full min-h-0 flex items-center justify-center p-2 relative z-10 overflow-hidden">
+                                <div className="relative w-full h-full max-h-[90%] max-w-sm flex flex-col items-center justify-center">
+                                    <div className="w-full h-4 bg-red-800 rounded-t-lg border-b-2 border-yellow-500 shrink-0"></div>
+                                    {/* 臉譜容器 */}
+                                    <div className="relative w-full flex-1 bg-stone-800 border-x-4 border-red-900 flex items-center justify-center overflow-hidden shadow-2xl min-h-0" onClick={() => changeFace()}>
+                                        <div className="absolute top-2 w-[50%] h-[15%] bg-gradient-to-t from-red-700 to-red-900 rounded-t-full z-0 border-2 border-yellow-500"></div>
+                                        <div className={`absolute inset-0 bg-white z-40 pointer-events-none transition-opacity duration-75 ${showFlash ? 'opacity-80' : 'opacity-0'}`} />
+                                        <div className="h-full w-full flex items-center justify-center p-4 relative z-10">
+                                            <div className="h-full aspect-[3/4] max-w-full relative"><OperaMask maskData={masks[currentMaskIndex]} /></div>
+                                        </div>
+                                        <Fan isVisible={isChanging} />
+                                        {textEffect && <div className="absolute inset-0 flex items-center justify-center text-7xl font-black text-white stroke-black z-30 animate-ping" style={{ textShadow: '2px 2px 0 #000' }}>{textEffect}</div>}
+                                        {showFortune && !isChanging && <div className="absolute bottom-4 left-4 right-4 bg-black/90 border border-yellow-500 p-2 rounded-lg z-30 animate-fade-in text-center"><div className="text-yellow-400 text-xs font-bold">🎭 大師判詞</div><div className="text-white text-xs leading-relaxed">{fortuneText || "大師正在思考..."}</div><button onClick={(e) => { e.stopPropagation(); setShowFortune(false); }} className="mt-1 text-gray-400 text-[10px] border border-gray-600 px-2 py-0.5 rounded">關閉</button></div>}
+                                    </div>
+                                    <div className="w-full h-8 bg-red-800 rounded-b-lg border-t-2 border-yellow-500 flex items-center justify-between px-4 shrink-0"><span className="text-yellow-200 font-bold text-xs">連擊: {combo}</span><span className="text-white font-bold text-xs">{masks[currentMaskIndex].name}</span></div>
+                                </div>
+                            </div>
+
+                            {/* 底部控制區：懸浮面板，強制加高 safe-bottom */}
+                            <div className="flex-none w-full p-4 safe-bottom z-20 flex flex-col items-center justify-end shrink-0">
+                                <div className="w-full max-w-sm glass-panel rounded-xl p-3 flex flex-col gap-3">
+                                    <div className="w-full"><SwipeController onTrigger={changeFace} onInteraction={handleInteractionStart} /></div>
+                                    <div className="flex gap-2 w-full">
+                                        <input type="text" value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} placeholder="輸入: 鋼鐵人" className="flex-1 bg-stone-800 text-white px-3 py-2 rounded text-sm border border-stone-700 focus:border-yellow-500 outline-none" />
+                                        <button onClick={() => executeAIAction('generate')} disabled={isGenerating} className="bg-yellow-700 text-white px-3 py-2 rounded text-xs whitespace-nowrap">{isGenerating ? '...' : 'AI 變臉'}</button>
+                                    </div>
+                                    <button onClick={() => executeAIAction('interpret')} disabled={isReading} className="w-full bg-stone-800 text-yellow-500/80 text-xs py-2 rounded border border-stone-700 hover:bg-stone-700 transition-colors">📜 {isReading ? '大師思考中...' : '大師解譜'}</button>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

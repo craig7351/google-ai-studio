@@ -9,7 +9,8 @@ import {
   Camera,
   HeartPulse,
   Plus,
-  Box
+  Box,
+  Upload
 } from 'lucide-react';
 import { AppCategory } from '../types';
 import { CATEGORIES } from '../constants';
@@ -29,7 +30,8 @@ const IconMap: Record<string, React.ElementType> = {
   Users,
   Film,
   Camera,
-  HeartPulse
+  HeartPulse,
+  Upload
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ selectedCategory, onSelectCategory, onOpenSubmit, isOpen }) => {

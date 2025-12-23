@@ -9,5 +9,6 @@ export const CATEGORIES = [
   { id: AppCategory.ENTERTAINMENT, icon: 'Film' },
   { id: AppCategory.PHOTO_VIDEO, icon: 'Camera' },
   { id: AppCategory.HEALTH, icon: 'HeartPulse' },
+  { id: AppCategory.USER_SUBMISSIONS, icon: 'Upload' },
 ];
 
