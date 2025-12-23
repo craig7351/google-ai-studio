@@ -267,12 +267,7 @@
 
             const getApiKey = () => HARDCODED_API_KEY;
 
-            const handleStartGame = useCallback(async () => {
-                try {
-                    const elem = document.documentElement;
-                    if (elem.requestFullscreen) await elem.requestFullscreen();
-                    else if (elem.webkitRequestFullscreen) await elem.webkitRequestFullscreen();
-                } catch (err) { }
+            const handleStartGame = useCallback(() => {
                 audioEngine.init();
                 if (!isMuted) audioEngine.startBGM();
                 setHasStarted(true);
